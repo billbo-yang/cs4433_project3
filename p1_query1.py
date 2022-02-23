@@ -6,7 +6,6 @@ def map_points(infected_list, line):
     output = ""
 
     point_attributes = line.split(",")
-    point_id = int(point_attributes[0])
     point_x = int(point_attributes[1])
     point_y = int(point_attributes[2])
 
@@ -14,12 +13,12 @@ def map_points(infected_list, line):
         infected_id = int(infected_attribute[0])
         infected_x = int(infected_attribute[1])
         infected_y = int(infected_attribute[2])
-        if point_id == infected_id:
-            continue
         dist = math.sqrt((infected_x - point_x)**2 + (infected_y - point_y)**2)
         if dist <= 6:
-            output = output + "{}\n".format(infected_id)
-    
+            if not output:
+                output = "{}".format(infected_id)
+            else:
+                output = output + "\n{}".format(infected_id)
     if output:
         return output
 
@@ -47,10 +46,6 @@ point_lines = sc.textFile("PEOPLE.csv").flatMap(lambda line: line.split("\n"))
 # for each normal point, check to see if its in range of any infected point
 point_map = point_lines.map(
         lambda line: map_points(infected_list, line)
-).filter(
-    lambda line: line
-).flatMap(
-    lambda line: line.split("\n")
 ).filter(
     lambda line: line
 ).map(
