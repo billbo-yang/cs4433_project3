@@ -102,8 +102,9 @@ all_pairs = all_people.foldByKey([], add).map(
     reduce_infected).flatMap(lambda lines: lines)
 
 # Folds the lists of people by key of infected person.
-# Removes duplicates from the pairs.
+# Removes duplicates from the pairs. Counts the number 
+# of unique people affected by COVID case.
 final_pairs = all_pairs.foldByKey([], add).map(
-    lambda pairs: (pairs[0], set(pairs[1])))
+    lambda pairs: (pairs[0], len(set(pairs[1]))))
 
 final_pairs.saveAsTextFile("temp2/")
