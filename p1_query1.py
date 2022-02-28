@@ -6,21 +6,16 @@ def map_points(infected_list, line):
     output = ""
 
     point_attributes = line.split(",")
+    point_id = int(point_attributes[0])
     point_x = int(point_attributes[1])
     point_y = int(point_attributes[2])
 
     for infected_attribute in infected_list:
-        infected_id = int(infected_attribute[0])
         infected_x = int(infected_attribute[1])
         infected_y = int(infected_attribute[2])
         dist = math.sqrt((infected_x - point_x)**2 + (infected_y - point_y)**2)
         if dist <= 6:
-            if not output:
-                output = "{}".format(infected_id)
-            else:
-                output = output + "\n{}".format(infected_id)
-    if output:
-        return output
+            return point_id
 
 def load_infected_file(filename):
     infected_file = open(filename, "r")
@@ -48,12 +43,7 @@ point_map = point_lines.map(
         lambda line: map_points(infected_list, line)
 ).filter(
     lambda line: line
-).map(
-    lambda infected_id: (infected_id, 1)
 )
 
-# count the number of occurrances of each infected id to get number of close contacts
-close_count = point_map.reduceByKey(lambda x,y:(x+y))
-
 # save the counts to output
-close_count.saveAsTextFile("temp/")
+point_map.saveAsTextFile("temp/")
