@@ -72,7 +72,8 @@ renamed_df_2 = grouped_df_t4.withColumnRenamed('cust_id', 'cust_id_2') \
 
 crossjoined_df_t5 = renamed_df_1.crossJoin(renamed_df_2)
 crossjoined_df_t5 = crossjoined_df_t5.filter(crossjoined_df_t5.age < crossjoined_df_t5.age_2) \
-    .filter(crossjoined_df_t5.trans_num_items_sum > crossjoined_df_t5.trans_num_items_sum_2)
+    .filter(crossjoined_df_t5.trans_total_sum > crossjoined_df_t5.trans_total_sum_2) \
+    .filter(crossjoined_df_t5.trans_num_items_sum < crossjoined_df_t5.trans_num_items_sum_2)
 print("~~~ customer pairs where c1.age < c2.age w/ other filters ~~~")
 crossjoined_df_t5.select('cust_id', 'cust_id_2').show()
 
